@@ -160,19 +160,20 @@ client.on('message', async msg => {
                                                             '8. Psicomotricidade\n' +
                                                             '9. Equipe Multidisciplinar');
                         sessoes[msg.from] = "aguardando_especialidade";
+                    }
                     break;
 
-            case "aguardando_turno":
-                if (msg.body !== null && msg.body.match(/(1|2)/i) && msg.from.endsWith('@c.us')) {
-                    const chat = await msg.getChat();
+                case "aguardando_turno":
+                    if (msg.body !== null && msg.body.match(/(1|2)/i) && msg.from.endsWith('@c.us')) {
+                        const chat = await msg.getChat();
 
-                    await delay(3000); //Delay de 3000 milisegundos mais conhecido como 3 segundos
-                    await chat.sendStateTyping(); // Simulando Digitação
-                    await delay(3000);
-                    await client.sendMessage(msg.from, 'Entendido, aguarde um momento você já sera atendido');
-                    sessoes[msg.from] = "finalizado";
-                }
-                break;
+                        await delay(3000); //Delay de 3000 milisegundos mais conhecido como 3 segundos
+                        await chat.sendStateTyping(); // Simulando Digitação
+                        await delay(3000);
+                        await client.sendMessage(msg.from, 'Entendido, aguarde um momento você já sera atendido');
+                        sessoes[msg.from] = "finalizado";
+                    }
+                    break;
 
             case "finalizado":
                 await delay(1800000); //delay de meia hora
