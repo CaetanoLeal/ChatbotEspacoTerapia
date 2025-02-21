@@ -15,11 +15,6 @@ client.on('ready', () => {
 // E inicializa tudo 
 client.initialize();
 
-
-    if (!sessoes[msg.from]) {
-        sessoes[msg.from] = "inicio";
-    }
-
 const delay = ms => new Promise(res => setTimeout(res, ms)); // Função que cria o delay entre uma ação e outra
 
 // Funil
@@ -41,10 +36,7 @@ client.on('message', async msg => {
                 await delay(3000); //Delay de 3000 milisegundos mais conhecido como 3 segundos
                 const contact = await msg.getContact(); //Pegando o contato
                 const name = contact.pushname; //Pegando o nome do contato
-                await client.sendMessage(msg.from,'*Espaço Terapia Fabrina Hanzem* agradece o seu contato.'+ name.split(" ")[0] + ' Informe o tipo de atendimento:\n\n1 - Particular\n2 - Convenio'); //Primeira mensagem de texto
-                await delay(3000); //delay de 3 segundos
-                await chat.sendStateTyping(); // Simulando Digitação
-                await delay(5000); //Delay de 5 segundos
+                await client.sendMessage(msg.from,'*Espaço Terapia Fabrina Hanzem* agradece o seu contato. '+ name.split(" ")[0] + ' Informe o tipo de atendimento:\n\n1 - Particular\n2 - Convenio'); //Primeira mensagem de texto
                 sessoes[msg.from] = "aguardando_tipo";
             }
             break;
