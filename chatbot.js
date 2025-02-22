@@ -24,6 +24,10 @@ client.on('message', async msg => {
 
     if (!sessoes[msg.from]) {
         sessoes[msg.from] = "inicio";
+
+        setTimeout(() => {
+            sessoes[msg.from] = "inicio"; // Agora sim, só executa após 30 minutos
+        }, 2400000); // 30 minutos (30 * 60 * 1000)
     }
     
     switch (sessoes[msg.from]) {
