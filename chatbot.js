@@ -41,7 +41,7 @@ client.on('message', async msg => {
                 await delay(3000); //Delay de 3000 milisegundos mais conhecido como 3 segundos
                 const contact = await msg.getContact(); //Pegando o contato
                 const name = contact.pushname; //Pegando o nome do contato
-                await client.sendMessage(msg.from,'*Espaço Terapia Fabrina Hanzem* agradece o seu contato. '+ name.split(" ")[0] + ' Informe o tipo de atendimento que deseja:\n\n1 - Particular\n2 - Convenio\n\n\nwww.espacoterapiasfh.com.br'); //Primeira mensagem de texto
+                await client.sendMessage(msg.from,'*Espaço Terapia Fabrina Hanzem* agradece o seu contato. '+ name.split(" ")[0] + ' ,Informe o tipo de atendimento que deseja:\n\n1 - Particular\n2 - Convenio\n\n\nwww.espacoterapiasfh.com.br'); //Primeira mensagem de texto
                 sessoes[msg.from] = "aguardando_tipo";
             }
             break;
@@ -88,7 +88,7 @@ client.on('message', async msg => {
                 await delay(3000); //Delay de 3000 milisegundos mais conhecido como 3 segundos
                 await chat.sendStateTyping(); // Simulando Digitação
                 await delay(3000);
-                await client.sendMessage(msg.from, 'por favor, envie sua carteirinha');
+                await client.sendMessage(msg.from, 'Por favor, envie sua carteirinha');
                 sessoes[msg.from] = "aguardando_carteirinha";
             }
             break;
@@ -101,10 +101,31 @@ client.on('message', async msg => {
                 await delay(3000); //delay de 3 segundos
                 await chat.sendStateTyping(); // Simulando Digitação
                 await delay(3000);
-                await client.sendMessage(msg.from, 'Por favor envie o encaminhamento digitalizado');
+                await client.sendMessage(msg.from, 'Por favor, envie o encaminhamento digitalizado');
                 sessoes[msg.from] = "aguardando_documento";
             }
+            else if (msg.type === 'image' && msg.from.endsWith('@c.us')) {
+                const chat = await msg.getChat();
+
+                await delay(3000); //delay de 3 segundos
+                await chat.sendStateTyping(); // Simulando Digitação
+                await delay(3000);
+                await client.sendMessage(msg.from, 'Envie a foto da carteirinha frente e costa (caso sua foto ja esteja com frente e costa digite 1 para continuar, se não mande o restante do documento');
+                sessoes[msg.from] = "aguardando_costa";
+            }
             break;
+
+            case "aguardando_costa":
+                if ((msg.body === '1' || msg.type === 'image') && msg.from.endsWith('@c.us')) {
+                    const chat = await msg.getChat();
+
+                    await delay(3000); //delay de 3 segundos
+                    await chat.sendStateTyping(); // Simulando Digitação
+                    await delay(3000);
+                    await client.sendMessage(msg.from, 'Por favor, envie o encaminhamento digitalizado');
+                    sessoes[msg.from] = "aguardando_documento";
+                }
+                break;
 
         case "aguardando_especialidade":
 
@@ -115,7 +136,7 @@ client.on('message', async msg => {
                 await chat.sendStateTyping(); // Simulando Digitação
                 await delay(3000);
                 await client.sendMessage(msg.from, 'Informe o turno desejado:\n1. Manhã\n2. Tarde');
-                sessoes[msg.from] = "Aguardando_turno";
+                sessoes[msg.from] = "aguardando_turno";
             }
             break;
 
@@ -174,7 +195,7 @@ client.on('message', async msg => {
                         await delay(3000); //Delay de 3000 milisegundos mais conhecido como 3 segundos
                         await chat.sendStateTyping(); // Simulando Digitação
                         await delay(3000);
-                        await client.sendMessage(msg.from, 'Entendido, aguarde um momento você já sera atendido');
+                        await client.sendMessage(msg.from, 'Entendido, aguarde um momento, seus dados serão confirmados e você já será atendido...');
                         sessoes[msg.from] = "finalizado";
                     }
                     break;
