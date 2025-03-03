@@ -41,7 +41,7 @@ client.on('message', async msg => {
                 await delay(3000); //Delay de 3000 milisegundos mais conhecido como 3 segundos
                 const contact = await msg.getContact(); //Pegando o contato
                 const name = contact.pushname; //Pegando o nome do contato
-                await client.sendMessage(msg.from,'Olá ' + name.split(" ")[0] + ', seja bem-vindo(a) à *Espaço Terapia Fabrina Hanzen* Aguarde, vamos atendê-lo(a), nosso horario de funcionamento é de segunda a sexta, das 08:00 às 18:00 hrs.\nInforme o tipo de atendimento que deseja:\n\n1 - Particular\n2 - Convenio\n\n\nwww.espacoterapiasfh.com.br'); //Primeira mensagem de texto
+                await client.sendMessage(msg.from,'Olá ' + name.split(" ")[0] + ', seja bem-vindo(a) à *Espaço Terapia Fabrina Hanzen* Aguarde, vamos atendê-lo(a), nosso horario de funcionamento é de segunda a sexta, das 08:00 às 18:00 hrs.\nInforme o tipo de atendimento que deseja:\n\n1 - Particular\n2 - Convenio\n3 - Falar com Atendente\n\n\nwww.espacoterapiasfh.com.br'); //Primeira mensagem de texto
                 sessoes[msg.from] = "aguardando_tipo";
             }
             break;
@@ -57,6 +57,22 @@ client.on('message', async msg => {
                 await client.sendMessage(msg.from, 'Por favor envie o encaminhamento digitalizado');
                 sessoes[msg.from] = "aguardando_documento";
             }
+
+            else if (msg.body !== null && msg.body === '3' && msg.from.endsWith('@c.us')) {
+                const chat = await msg.getChat();
+
+                await delay(1000); //Delay de 3000 milisegundos mais conhecido como 3 segundos
+                await chat.sendStateTyping(); // Simulando Digitação
+                await delay(3000);
+                await client.sendMessage(msg.from, 'Ao agendar uma consulta o paciente deve comparecer com 10 minutos de atencedencia e o token deve ser gerado na recepção antes da consulta.'
+                                                 + 'No caso de atendimento infantil e adolescente, o responsável que levar a criança deverá ter o aplicativo da operadora de saúde para a geração do token, caso contrário, não será efetivado o atendimento.');
+                await delay(1000); //Delay de 3000 milisegundos mais conhecido como 3 segundos
+                await chat.sendStateTyping(); // Simulando Digitação
+                await delay(3000);
+                await client.sendMessage(msg.from, 'Aguarde um momento, seus dados serão confirmados e você será atendido...');
+                sessoes[msg.from] = "finalizado";
+            }
+            
             else if (msg.body !== null && msg.body === '2' && msg.from.endsWith('@c.us')) {
                 const chat = await msg.getChat();
                     
