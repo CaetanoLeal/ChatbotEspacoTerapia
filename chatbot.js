@@ -2,7 +2,7 @@ let sessoes = {};
 
 // leitor de qr code
 const qrcode = require('qrcode-terminal');
-const { Client, Buttons, List, MessageMedia } = require('whatsapp-web.js'); // Mudança Buttons
+const { Client, LocalAuth, Buttons, List, MessageMedia } = require('whatsapp-web.js'); // Mudança Buttons
 const client = new Client({
     authStrategy: new LocalAuth(), // Define sessão para o aws
     puppeteer: {
