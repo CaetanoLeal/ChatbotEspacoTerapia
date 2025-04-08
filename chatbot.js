@@ -62,7 +62,7 @@ client.on('message', async msg => {
                 await delay(1000); //delay de 3 segundos
                 await chat.sendStateTyping(); // Simulando Digitação
                 await delay(3000);
-                await client.sendMessage(msg.from, 'Por favor envie o encaminhamento digitalizado\nCaso não tenha digite 0 para voltar pro começo');
+                await client.sendMessage(msg.from, 'Por favor envie o encaminhamento digitalizado\nCaso não tenha digite 0 para voltar para o começo');
                 sessoes[msg.from] = "aguardando_documento";
             }
 
@@ -107,7 +107,7 @@ client.on('message', async msg => {
                 await delay(1000); //Delay de 3000 milisegundos mais conhecido como 3 segundos
                 await chat.sendStateTyping(); // Simulando Digitação
                 await delay(3000);
-                await client.sendMessage(msg.from, 'Por favor, envie sua carteirinha, Caso não tenha digite 0 para voltar pro começo');
+                await client.sendMessage(msg.from, 'Por favor, envie sua carteirinha, Caso não tenha digite 0 para voltar para o começo');
                 sessoes[msg.from] = "aguardando_carteirinha";
             }
             break;
@@ -120,7 +120,7 @@ client.on('message', async msg => {
                 await delay(1000); //delay de 3 segundos
                 await chat.sendStateTyping(); // Simulando Digitação
                 await delay(3000);
-                await client.sendMessage(msg.from, 'Por favor envie o encaminhamento digitalizado\nCaso não tenha digite 0 para voltar pro começo');
+                await client.sendMessage(msg.from, 'Por favor envie o encaminhamento digitalizado\nCaso não tenha digite 0 para voltar para o começo');
                 sessoes[msg.from] = "aguardando_documento";
             }
             else if (msg.type === 'image' && msg.from.endsWith('@c.us')) {
@@ -150,7 +150,7 @@ client.on('message', async msg => {
                     await delay(1000); //delay de 3 segundos
                     await chat.sendStateTyping(); // Simulando Digitação
                     await delay(3000);
-                    await client.sendMessage(msg.from, 'Por favor envie o encaminhamento digitalizado\nCaso não tenha digite 0 para voltar pro começo');
+                    await client.sendMessage(msg.from, 'Por favor envie o encaminhamento digitalizado\nCaso não tenha digite 0 para voltar para o começo');
                     sessoes[msg.from] = "aguardando_documento";
                 }
                 break;
