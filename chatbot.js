@@ -40,7 +40,7 @@ client.on('message', async msg => {
     
     switch (sessoes[msg.from]) {
         case "inicio":
-            if (msg.body.match(/(ola|olá|oi|bom|boa)/i) && msg.from.endsWith('@c.us')) {
+            if (msg.body.match(/(ola|olá|oi|bom|boa|eae|eai|tudo|fala)/i) && msg.from.endsWith('@c.us')) {
 
                 const chat = await msg.getChat();
         
@@ -49,8 +49,114 @@ client.on('message', async msg => {
                 await delay(3000); //Delay de 3000 milisegundos mais conhecido como 3 segundos
                 const contact = await msg.getContact(); //Pegando o contato
                 const name = contact.pushname; //Pegando o nome do contato
-                await client.sendMessage(msg.from,'Olá ' + name.split(" ")[0] + ', seja bem-vindo(a) à *Espaço Terapias Fabrina Hanzen* Aguarde, vamos atendê-lo(a), nosso horario de funcionamento é de segunda a sexta, das 08:00 às 18:00 hrs.\nInforme o tipo de atendimento que deseja:\n\n1 - Particular\n2 - Convenio\n3 - Falar com Atendente\n\n\nwww.espacoterapiasfh.com.br'); //Primeira mensagem de texto
-                sessoes[msg.from] = "aguardando_tipo";
+                await client.sendMessage(msg.from,'Olá ' + name.split(" ")[0] + ', Olá, sou a lucy, atendente virtual da espaço terapias Fabrina Hanzen, tudo bem? é seu primeiro atendimento\n\n1 - Sim\n2 - Não\n\n\nwww.espacoterapiasfh.com.br');
+                sessoes[msg.from] = "aguardando_inicio";
+            }
+            break;
+
+          case "aguardando_inicio":
+            if (msg.body !== null && msg.body === '1' && msg.from.endsWith('@c.us')) {
+                const chat = await msg.getChat();
+                await delay(1000); //delay de 3 segundos
+                await chat.sendStateTyping(); // Simulando Digitação
+                await delay(3000);
+                await client.sendMessage(msg.from, 'Legal, bom saber que você tem interesse no nosso atendimento. agora precisamos de: laudo, encaminhamento e carteirinha');
+                await chat.sendStateTyping(); // Simulando Digitação
+                await delay(3000);
+                await client.sendMessage(msg.from, 'Vamos começar pelo seu laudo. Por favor envie o seu laudo');
+                sessoes[msg.from] = "aguardando_laudo";
+            }
+            break;
+
+            case "aguardando_laudo":
+                if ((msg.type === 'image' || msg.type === 'document') && msg.from.endsWith('@c.us')) {
+                    const chat = await msg.getChat();
+                    await delay(1000);
+                    await chat.sendStateTyping();
+                    await delay(3000);
+                    await client.sendMessage(msg.from, 'Seu laudo foi recebido com sucesso! Agora, por favor, envie a sua carteirinha.');
+                    sessoes[msg.from] = "aguardando_carteirinha";
+                }
+                break;
+
+
+            case "aguardando_documentos":
+            if (msg.body !== null && msg.body === '1' && msg.from.endsWith('@c.us')) {
+                const chat = await msg.getChat();
+                
+        
+
+                await delay(1000); //delay de 3 segundos
+                await chat.sendStateTyping(); // Simulando Digitação
+                await delay(3000);
+                await client.sendMessage(msg.from, 'Vi que você mandou tudo certo, agora preciso que me diga a sua disponibilidade de horario para verificarmos se temos como te atender\n1- manhã\n2- tarde'); 
+                sessoes[msg.from] = "aguardando_turno";
+            }
+                break;
+
+
+            case "aguardando_inicio":
+            if (msg.body !== null && msg.body === '2' && msg.from.endsWith('@c.us')) {
+                const chat = await msg.getChat();
+        
+
+                await delay(1000); //delay de 3 segundos
+                await chat.sendStateTyping(); // Simulando Digitação
+                await delay(3000);
+                await client.sendMessage(msg.from, 'Vi que você colocou "Não", ja é paciente\n1- Sim\n2- Não'); 
+                sessoes[msg.from] = "aguardando_simnao";
+            }
+                break;
+
+            
+            case "aguardando_simnao":
+            if (msg.body !== null && msg.body === '1' && msg.from.endsWith('@c.us')) {
+                const chat = await msg.getChat();
+        
+
+                await delay(1000); //delay de 3 segundos
+                await chat.sendStateTyping(); // Simulando Digitação
+                await delay(3000);
+                await client.sendMessage(msg.from, 'Gostaria de falar com uma atendente ou continuar sendo atendido por mim?\n1- Continuar atendimento virtual\n2- Falar com atendente'); 
+                sessoes[msg.from] = "aguardando_tipo_atendimento";
+            }
+            break;
+            
+            case "aguardando_tipo_atendimento":
+            if (msg.body !== null && msg.body === '1' && msg.from.endsWith('@c.us')) {
+                const chat = await msg.getChat();
+        
+                await delay(1000); //Delay de 3000 milisegundos mais conhecido como 3 segundos
+                await chat.sendStateTyping(); // Simulando Digitação
+                await delay(2787);
+                await client.sendMessage(msg.from, 'Legal, bom saber que você tem interesse no nosso atendimento. agora precisamos de: laudo, encaminhamento e carteirinha');
+                await chat.sendStateTyping(); // Simulando Digitação
+                await delay(3000);
+                await client.sendMessage(msg.from, 'Vamos começar pelo seu laudo. Por favor envie o seu laudo');
+                sessoes[msg.from] = "aguardando_laudo";
+            }
+            else if (msg.body !== null && msg.body === '2' && msg.from.endsWith('@c.us')) {
+                
+                const chat = await msg.getChat();
+        
+                await delay(1000); //delay de 3 segundos
+                await chat.sendStateTyping(); // Simulando Digitação
+                await delay(3000); //Delay de 3000 milisegundos mais conhecido como 3 segundos
+                await client.sendMessage(msg.from,'Temos um prazo de 48h para que a atendente entre em contato com você para finalizar o atendimento'); //Primeira mensagem de texto
+                sessoes[msg.from] = "finalizado";
+            }
+            break;
+            
+            case "aguardando_simnao":
+            if (msg.body !== null && msg.body === '2' && msg.from.endsWith('@c.us')) {
+                const chat = await msg.getChat();
+        
+
+                await delay(1000); //delay de 3 segundos
+                await chat.sendStateTyping(); // Simulando Digitação
+                await delay(3000);
+                await client.sendMessage(msg.from, 'ok, vimos que sua duvida é para outra questão. Pedi para que a atendente te responda. Só aguardar\n\n Lembrando que não envie outra mensagem para não sair da ordem de atendimento. obrigada');
+                sessoes[msg.from] = "finalizado";
             }
             break;
 
@@ -93,7 +199,7 @@ client.on('message', async msg => {
                                                     '3. Mediservice\n' +
                                                     '4. Golden Cross\n' +
                                                     '5. Petrobras Saúde\n' +
-                                                    '6. Klini\n' +
+                                                    '6. Klini\n' + 
                                                     '7. Porto Saúde(Porto Seguro)\n' +
                                                     '8. Referenciamento Unimed');
                 sessoes[msg.from] = "aguardando_plano";
@@ -138,8 +244,8 @@ client.on('message', async msg => {
                 await delay(1000); //delay de 3 segundos
                 await chat.sendStateTyping(); // Simulando Digitação
                 await delay(3000); //Delay de 3000 milisegundos mais conhecido como 3 segundos
-                await client.sendMessage(msg.from,'Informe o tipo de atendimento que deseja:\n1 - Particular\n2 - Convenio\n3 - Falar com Atendente\n\n\nwww.espacoterapiasfh.com.br'); //Primeira mensagem de texto
-                sessoes[msg.from] = "aguardando_tipo";
+                await client.sendMessage(msg.from,'Vi que você mandou tudo certo, agora preciso que me diga a sua disponibilidade de horario para verificarmos se temos como te atender\n1- manhã\n2- tarde'); //Primeira mensagem de texto
+                sessoes[msg.from] = "aguardando_turno";
             }
             break;
 
@@ -150,7 +256,7 @@ client.on('message', async msg => {
                     await delay(1000); //delay de 3 segundos
                     await chat.sendStateTyping(); // Simulando Digitação
                     await delay(3000);
-                    await client.sendMessage(msg.from, 'Por favor envie o encaminhamento digitalizado\nCaso não tenha digite 0 para voltar para o começo');
+                    await client.sendMessage(msg.from, 'ok agora envie a costa do documento, caso ja tenha enviado digite 1 para continuar');
                     sessoes[msg.from] = "aguardando_documento";
                 }
                 break;
@@ -175,8 +281,8 @@ client.on('message', async msg => {
                 await delay(1000); //Delay de 3000 milisegundos mais conhecido como 3 segundos
                 await chat.sendStateTyping(); // Simulando Digitação
                 await delay(2787);
-                await client.sendMessage(msg.from, 'Digite o seu cpf');
-                sessoes[msg.from] = "aguardando_cpf";
+                await client.sendMessage(msg.from, 'Vi que você mandou tudo certo, agora preciso que me diga a sua disponibilidade de horario para verificarmos se temos como te atender\n1- manhã\n2- tarde');
+                sessoes[msg.from] = "aguardando_turno";
             }
             else if (msg.body !== null && msg.body === '0' && msg.from.endsWith('@c.us')) {
                 
@@ -235,7 +341,8 @@ client.on('message', async msg => {
                         await delay(1000); //Delay de 3000 milisegundos mais conhecido como 3 segundos
                         await chat.sendStateTyping(); // Simulando Digitação
                         await delay(3000);
-                        await client.sendMessage(msg.from, 'Aguarde um momento, seus dados serão confirmados e você será atendido...');
+                        await client.sendMessage(msg.from, 'Temos um prazo de 48h para que a atendente entre em contato com você para finalizar o atendimento');
+                        
                         sessoes[msg.from] = "finalizado";
                     }
                     break;
